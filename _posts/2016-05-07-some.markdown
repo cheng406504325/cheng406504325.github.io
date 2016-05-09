@@ -1,0 +1,56 @@
+---
+layout: post
+title:  "Welcome to Jekyll!"
+date:   2016-05-07 14:06:46 +0800
+categories: jekyll update
+---
+
+admin memcache  c7.zw:11236
+
+kafka安装路径 14的/home/web_server/software/kafka_2.9.1-0.8.2.1
+查看kafka队列消费情况 kafka-consumer-offset-checker.sh --zookeeper ai-hs18.zw --group admin
+
+更新老工程：
+> 1. 上传war包
+> 2. 测试
+> 3. 脚本位置 web_server:~/admin/upload_old.sh s4.zw 8080 8081
+
+入口1：admin 首都在线 -> sd-k3.zw(nginx) -> s4,s6
+入口2：admin2 尚航 -> memcache.n.svr015（10.1.10.15） -> s4, s6
+根据正则转发/admin2007->8080
+找寻nginx配置文件：ps -ef | grep nginx -c后面是配置文件路径
+nginx配置文件中include了一个配置文件目录/etc/nginx/conf.d/
+
+
+根据ip找寻域名用nslookup -qt=a IP
+
+http://sd-d10.zw:8099/ganglia/?m=network_report 监控
+
+runner更新：
+ > 1. 查看部署位置：sh kafka-consumer-offset-checker.sh  --zookeeper ai-hs18.zw --group admin
+ > 2. 打包：mvn -DexcludeScope=provided clean package dependency:copy-dependencies -Dmaven.test.skip=true -U
+ > 3. 更新部署：sh update_runner.sh ai-s3.zw
+ > 4. 重启服务：supervisorctl -c /data/web_server/config/supervisord.conf
+ 	restart tagAnnotatorListener
+ > 5. 查看日志： tail -f /data/logs/topic-tag-annotator-listener/main.log	
+ 
+ 记录调整idea工程结构
+ 
+ > 1. 背景：以为idea一个project是一个工程，其实与workset更相似。导致不能全局查找代码，不能设置module依赖等等
+ > 2. 解决：
+ > * git拉出所有工程
+ > * 打开idea import project，选择含有所有工程的根目录导入
+ > * 打开module setting，删除所有多余的module
+ > * idea会自动设置工程间的依赖
+ 
+ Admin redis ./redis-cli -h c1.zw -p 10081
+ 
+ 命令行下载JDK：
+ > wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie"
+ 
+ ai-ls230.zw ai-ls231.zw         ai-ls36.zw
+ 
+ 
+ 
+ ./redis-cli -n 1 -h s1.zw -p 11001 monitor | grep remote_task_$1 | grep PO
+ ./redis-cli -n 4 -h c7.zw -p 11003 monitor | grep remote_task_$1 | grep POP
